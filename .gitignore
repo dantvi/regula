@@ -65,9 +65,7 @@ web_modules/
 # Yarn Integrity file
 .yarn-integrity
 
-# dotenv environment variable files
-.env
-.env.*
+# dotenv environment variable files (see Regula specific section below)
 !.env.example
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -137,3 +135,50 @@ dist
 # Vite logs files
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
+
+# pnpm
+.pnpm-debug.log*
+.pnpm-store/
+
+# Monorepo build outputs
+**/dist/
+**/.next/
+**/out/
+**/build/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Personal notes
+my-notes/
+
+# Environment files in all workspaces
+**/.env
+**/.env.*
+!**/.env.example
+.env
+.env.*
+
+# Local databases
+*.db
+*.sqlite
+*.sqlite3
+
+# Ingestion / eval artifacts
+/data
+/datasets
+/artifacts
+
+# Future turbo cache
+.turbo/
+
+# Runtime logs
+/logs
