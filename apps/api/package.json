@@ -8,15 +8,22 @@
     "build": "tsc -p tsconfig.json",
     "start": "node dist/index.js",
     "lint": "echo 'lint placeholder'",
-    "test": "echo 'test placeholder'"
+    "test": "echo 'test placeholder'",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx src/db/migrate.ts",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
     "@regula/config": "workspace:*",
     "@regula/shared": "workspace:*",
-    "@regula/observability": "workspace:*"
+    "@regula/observability": "workspace:*",
+    "drizzle-orm": "^0.36.4",
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@types/node": "^20.14.0",
+    "@types/pg": "^8.11.0",
+    "drizzle-kit": "^0.28.1",
     "tsx": "^4.16.0",
     "typescript": "^5.6.0"
   }
