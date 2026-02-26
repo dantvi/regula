@@ -1,4 +1,5 @@
 # regula
+
 Regula is an AI-powered policy and data copilot built on Swedish public regulations and statistics, designed to demonstrate production-grade RAG, tool integration, and governance-focused AI architecture.
 
 ## Monorepo Structure
@@ -33,11 +34,13 @@ This project is organized as a public monorepo using pnpm workspaces:
 ### Setup
 
 1. **Install dependencies:**
+
 ```bash
 pnpm install
 ```
 
 2. **Set up environment variables:**
+
 ```bash
 # Copy example env file
 cp .env.example .env
@@ -46,6 +49,7 @@ cp .env.example .env
 ```
 
 3. **Start PostgreSQL (Docker):**
+
 ```bash
 cd infra/docker
 docker compose up -d
@@ -53,11 +57,13 @@ cd ../..
 ```
 
 4. **Build all packages:**
+
 ```bash
 pnpm -r build
 ```
 
 5. **Run database migrations:**
+
 ```bash
 # Generate migration files (first time or after schema changes)
 pnpm --filter @regula/api db:generate
@@ -67,11 +73,13 @@ pnpm --filter @regula/api db:migrate
 ```
 
 6. **Run the API server:**
+
 ```bash
 pnpm --filter @regula/api dev
 ```
 
 7. **Run the web app (in a separate terminal):**
+
 ```bash
 pnpm --filter @regula/web dev
 ```
@@ -79,21 +87,73 @@ pnpm --filter @regula/web dev
 ### Database Management
 
 **View database with Drizzle Studio:**
+
 ```bash
 pnpm --filter @regula/api db:studio
 ```
 
 **Stop database:**
+
 ```bash
 cd infra/docker
 docker compose down
 ```
 
 **Wipe database and start fresh:**
+
 ```bash
 cd infra/docker
 docker compose down -v
 docker compose up -d
 cd ../..
 pnpm --filter @regula/api db:migrate
+```
+
+### Auth testing
+
+With the API running (`pnpm --filter @regula/api dev`), you can exercise auth with curl. The API uses a session cookie `regula_session` (HttpOnly, SameSite=Lax).
+
+**Register**
+
+```bash
+curl -i -X POST http://localhost:3001/auth/register \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","password":"yourpassword10","preferred_language":"en"}'
+```
+
+Use a password of at least 10 characters. Optional `preferred_language` is `sv` or `en` (default `sv`).
+
+**Login**
+
+```bash
+curl -i -X POST http://localhost:3001/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","password":"yourpassword10"}'
+```
+
+Save the `Set-Cookie` header from the response to send the session on later requests.
+
+**Me (with cookie jar)**
+
+```bash
+# Save cookies to a file on login, then reuse them
+curl -c cookies.txt -X POST http://localhost:3001/auth/login \
+  -H "Content-Type: application/json" \
+  -d '{"email":"you@example.com","password":"yourpassword10"}'
+
+curl -b cookies.txt http://localhost:3001/auth/me
+```
+
+**Update language (PATCH settings)**
+
+```bash
+curl -b cookies.txt -X PATCH http://localhost:3001/settings \
+  -H "Content-Type: application/json" \
+  -d '{"preferred_language":"sv"}'
+```
+
+**Logout**
+
+```bash
+curl -b cookies.txt -X POST http://localhost:3001/auth/logout
 ```

@@ -7,8 +7,8 @@ export interface SourceRef {
   page?: string;
 }
 
-// Error codes
 export type ErrorCode =
+  | "auth.email_taken"
   | "auth.unauthorized"
   | "auth.invalid_credentials"
   | "auth.session_expired"
@@ -28,7 +28,6 @@ export interface ErrorResponse {
   };
 }
 
-// Database model types
 export type UserStatus = "active" | "disabled";
 export type MessageRole = "user" | "assistant" | "system";
 
@@ -40,6 +39,13 @@ export interface User {
   status: UserStatus;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface AuthUser {
+  id: string;
+  email: string;
+  preferredLanguage: Language;
+  status: UserStatus;
 }
 
 export interface Conversation {

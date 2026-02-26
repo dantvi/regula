@@ -18,9 +18,11 @@
     "@regula/shared": "workspace:*",
     "@regula/observability": "workspace:*",
     "drizzle-orm": "^0.36.4",
-    "pg": "^8.13.1"
+    "pg": "^8.13.1",
+    "bcrypt": "^5.1.1"
   },
   "devDependencies": {
+    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20.14.0",
     "@types/pg": "^8.11.0",
     "drizzle-kit": "^0.28.1",
