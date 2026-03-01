@@ -6,6 +6,7 @@ import { sendError } from "./utils/http";
 import { setCookieOptions } from "./utils/cookie";
 import * as authRoutes from "./routes/auth";
 import * as settingsRoutes from "./routes/settings";
+import * as usageRoutes from "./routes/usage";
 import type { AuthRequest } from "./middleware/auth";
 import http from "http";
 
@@ -62,6 +63,10 @@ const server = http.createServer(async (req, res) => {
   }
   if (path === "/settings" && method === "PATCH") {
     await settingsRoutes.handlePatchSettings(req as AuthRequest, res);
+    return;
+  }
+  if (path === "/usage/me" && method === "GET") {
+    await usageRoutes.handleGetUsageMe(req as AuthRequest, res);
     return;
   }
 

@@ -6,6 +6,8 @@ import type { Language } from "@regula/shared";
 import { sendJson, sendError, parseJson } from "../utils/http";
 import type { AuthRequest } from "../middleware/auth";
 import { loadAuth } from "../middleware/auth";
+import { requireQuota } from "../middleware/quota";
+import type { QuotaRequest } from "../middleware/quota";
 
 interface PatchSettingsBody {
   preferred_language?: Language;
@@ -23,6 +25,8 @@ export async function handlePatchSettings(
 ): Promise<void> {
   const ok = await loadAuth(req, res);
   if (!ok) return;
+  const quotaOk = await requireQuota(req as QuotaRequest, res);
+  if (!quotaOk) return;
 
   let body: PatchSettingsBody;
   try {

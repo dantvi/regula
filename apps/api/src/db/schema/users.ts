@@ -6,6 +6,10 @@ export const users = pgTable("users", {
   passwordHash: text("password_hash").notNull(),
   preferredLanguage: text("preferred_language").notNull().default("sv"),
   status: text("status").notNull().default("active"),
-  createdAt: timestamp("created_at").notNull().defaultNow(),
-  updatedAt: timestamp("updated_at").notNull().defaultNow(),
+  createdAt: timestamp("created_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
+  updatedAt: timestamp("updated_at", { withTimezone: true })
+    .notNull()
+    .defaultNow(),
 });

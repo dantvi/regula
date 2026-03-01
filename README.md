@@ -42,10 +42,7 @@ pnpm install
 2. **Set up environment variables:**
 
 ```bash
-# Copy example env file
 cp .env.example .env
-
-# Edit .env with your local values (default values work for local dev)
 ```
 
 3. **Start PostgreSQL (Docker):**
@@ -65,10 +62,7 @@ pnpm -r build
 5. **Run database migrations:**
 
 ```bash
-# Generate migration files (first time or after schema changes)
 pnpm --filter @regula/api db:generate
-
-# Apply migrations to database
 pnpm --filter @regula/api db:migrate
 ```
 
@@ -136,7 +130,6 @@ Save the `Set-Cookie` header from the response to send the session on later requ
 **Me (with cookie jar)**
 
 ```bash
-# Save cookies to a file on login, then reuse them
 curl -c cookies.txt -X POST http://localhost:3001/auth/login \
   -H "Content-Type: application/json" \
   -d '{"email":"you@example.com","password":"yourpassword10"}'
@@ -156,4 +149,29 @@ curl -b cookies.txt -X PATCH http://localhost:3001/settings \
 
 ```bash
 curl -b cookies.txt -X POST http://localhost:3001/auth/logout
+```
+
+### Quota and usage
+
+Authenticated endpoints that consume quota (e.g. `PATCH /settings`) are limited per user per period. Defaults: 200 requests per 30 days. Configure in `.env`:
+
+- `QUOTA_PERIOD_DAYS` (default: 30)
+- `DEMO_REQUEST_LIMIT` (default: 200). Set to a small value (e.g. `2`) to test quota quickly.
+
+**Check current usage (does not consume quota)**
+
+```bash
+curl -b cookies.txt http://localhost:3001/usage/me
+```
+
+Response shape: `period_start`, `period_end`, `request_limit`, `requests_used`, `remaining_requests`.
+
+**Trigger quota (429)**
+
+After login, call `PATCH /settings` until `remaining_requests` is 0, then one more request returns 429 with `quota.exceeded`:
+
+```bash
+curl -b cookies.txt -X PATCH http://localhost:3001/settings \
+  -H "Content-Type: application/json" \
+  -d '{"preferred_language":"en"}'
 ```
