@@ -10,6 +10,7 @@ export interface Config {
   databaseUrl: string;
   quotaPeriodDays: number;
   demoRequestLimit: number;
+  demoTokenLimit: number;
 }
 
 export function loadConfig(): Config {
@@ -35,6 +36,9 @@ export function loadConfig(): Config {
   const demoRequestLimit = process.env.DEMO_REQUEST_LIMIT
     ? parseInt(process.env.DEMO_REQUEST_LIMIT, 10)
     : 200;
+  const demoTokenLimit = process.env.DEMO_TOKEN_LIMIT
+    ? parseInt(process.env.DEMO_TOKEN_LIMIT, 10)
+    : 100_000;
 
   return {
     nodeEnv,
@@ -42,5 +46,6 @@ export function loadConfig(): Config {
     databaseUrl,
     quotaPeriodDays,
     demoRequestLimit,
+    demoTokenLimit,
   };
 }

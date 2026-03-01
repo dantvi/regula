@@ -69,6 +69,14 @@ const server = http.createServer(async (req, res) => {
     await usageRoutes.handleGetUsageMe(req as AuthRequest, res);
     return;
   }
+  if (
+    config.nodeEnv !== "production" &&
+    path === "/usage/_debug/add-tokens" &&
+    method === "POST"
+  ) {
+    await usageRoutes.handleDebugAddTokens(req as AuthRequest, res);
+    return;
+  }
 
   sendError(res, 404, "system.not_found");
 });

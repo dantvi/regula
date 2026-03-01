@@ -28,6 +28,8 @@ export async function ensureCurrentUsagePeriod(userId: string): Promise<void> {
     userId,
     periodStart: now,
     periodEnd,
+    tokenLimit: config.demoTokenLimit,
+    tokensUsed: 0,
     requestLimit: config.demoRequestLimit,
     requestsUsed: 0,
   });
